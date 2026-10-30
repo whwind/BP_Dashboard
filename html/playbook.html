@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+
+	<link rel="stylesheet" href="../resources/css/playbook.css" />
+
+	<title>PLAYBOOK</title>
+</head>
+
+<body>
+	<div class="page">
+		<header>
+			<a href="#">이전페이지</a>
+			<h1>TSMC PlayBook</h1>
+			<span>Ver. 3.0</span>
+			<ul>
+				<li>2024 공시정보 데이터 이력으로 생성 Remark 최대글자수 확인필요</li>
+				<li>
+					<dl>
+						<dt>Last Modified</dt>
+						<dd>2026.11.12</dd>
+					</dl>
+					<dl>
+						<dt>Registered by</dt>
+						<dd>김하이닉스(3125512355)</dd>
+					</dl>
+				</li>
+			</ul>
+			<div>
+				<button type="button" class="word">Word 파일 다운로드</button>
+				<button id="openAiButton" class="ai-open-button" type="button" aria-controls="qaPane" aria-expanded="false">AI에게 질문하기</button>
+			</div>
+		</header>
+
+		<div class="body-layout">
+			<nav>
+				<div>
+					<p>Content</p>
+					<span>
+						<strong>1</strong>
+						<em>25</em>
+					</span>
+				</div>
+				<ul>
+					<li><a href="#" class="on">Summary</a></li>
+					<li><a href="#">BP Overview</a></li>
+					<li><a href="#">Financials / M&amp;A</a></li>
+					<li><a href="#">Global Market</a></li>
+					<li><a href="#">Organization</a></li>
+					<li><a href="#">Equipment</a></li>
+					<li><a href="#">Sites</a></li>
+					<li><a href="#">Executives</a></li>
+					<li><a href="#">Relationship</a></li>
+					<li><a href="#">Purchasing Strategy...</a></li>
+					<li><a href="#">Talking Point</a></li>
+					<li><a href="#">Expected Q&amp;A</a></li>
+				</ul>
+			</nav>
+			<main class="resizable-area"> 
+				<section id="centerPane" class="pane center-area">
+					<figure>
+						<img src="../resources/imges/sample.png">
+					</figure>
+					<figure>
+						<img src="../resources/imges/sample.png">
+					</figure>
+				</section>
+
+				<aside id="qaPane" class="pane qa-area" aria-label="AI Q&A 영역" hidden>
+					<button id="closeAiButton" class="qa-close-button" type="button">X</button>
+					<div class="questWrap">
+						<h3>AI Q&A</h3>
+						<p>Playbook 내용에 대해 질문해보세요.</p>
+					</div>
+				</aside>
+			</main>
+
+		</div>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.5/split.min.js"></script>
+	<script>
+		const openAiButton = document.getElementById('openAiButton');
+		const closeAiButton = document.getElementById('closeAiButton');
+		const centerPane = document.getElementById('centerPane');
+		const qaPane = document.getElementById('qaPane');
+		let splitInstance = null;
+
+		function openAiPane() {
+			if (splitInstance || typeof Split === 'undefined') return;
+
+			/* 변경: Split.js 초기 비율을 적용하기 전에 기존 flex 확장 동작 해제 */
+			document.querySelector('.resizable-area').classList.add('ai-open');
+			qaPane.hidden = false;
+			openAiButton.setAttribute('aria-expanded', 'true');
+
+			splitInstance = Split(['#centerPane', '#qaPane'], {
+				sizes: [62, 38],
+				minSize: [320, 300],
+				gutterSize: 30,
+				snapOffset: 0,
+				direction: 'horizontal',
+				cursor: 'col-resize'
+			});
+		}
+
+		function closeAiPane() {
+			if (!splitInstance) return;
+
+			splitInstance.destroy();
+			splitInstance = null;
+			qaPane.hidden = true;
+			document.querySelector('.resizable-area').classList.remove('ai-open');
+			openAiButton.setAttribute('aria-expanded', 'false');
+
+			/* 변경: 닫힌 뒤 가운데 영역이 남은 너비 전체를 사용하도록 보장 */
+			centerPane.style.removeProperty('width');
+			centerPane.style.removeProperty('flex-basis');
+			openAiButton.focus();
+		}
+
+		openAiButton.addEventListener('click', openAiPane);
+		closeAiButton.addEventListener('click', closeAiPane);
+	</script>
+</body>
+
+</html>
